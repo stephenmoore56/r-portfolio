@@ -1,0 +1,75 @@
+---
+title: "Histogram Examples"
+author: "Stephen Moore"
+date: "December 15, 2015"
+output: 
+    html_document:
+        theme: cosmo
+        highlight: tango
+---
+```{r init, warning=FALSE, message=FALSE}
+library(lattice)
+library(ggplot2)
+library(knitr)
+knitr::opts_chunk$set(tidy=T, 
+               fig.width=8,
+               fig.height=6,
+               fig.align='center',
+               warning=FALSE,
+               message=FALSE,
+               echo=TRUE)
+options(width = 120)
+```
+
+This document demonstrates different ways of generating histograms with the base, lattice and ggplot2 plotting packages.
+
+```{r}
+data(iris); attach(iris)
+```
+
+### Base Plotting Package
+
+```{r, tidy=F}
+par(mfrow=c(1,2))
+hist(Sepal.Length, col="orange", 
+     main="Sepal Length (Frequency)",
+     xlab="Sepal Length (cm)")
+hist(Sepal.Length, prob=TRUE, col="violet", 
+     main="Sepal Length (Density)",
+     xlab="Sepal Length (cm)") 
+lines(density(Sepal.Length), col="blue", lwd=2)
+lines(density(Sepal.Length, adjust=2), lty="dotted", col="darkgreen", lwd=2)
+par(mfrow=c(1,1))
+```
+
+### Lattice Plotting Package
+
+```{r latticePlottingPackage, tidy=F}
+histogram(~ Sepal.Length | Species,
+          col=c("orange","lightblue","purple"),
+          main="Sepal Length By Species",
+          xlab="Sepal Length (cm)",
+          panel=function(x, col=col,...){
+            panel.histogram(x,col=col[packet.number()],...)
+          })
+```
+
+### ggplot2 Plotting Package
+
+```{r ggplot2PlottingPackage, tidy=F}
+ggplot(data = iris, aes(x=Sepal.Length)) +
+  geom_histogram(aes(fill=Species)) +
+  scale_fill_brewer(palette="Set2") +
+  facet_wrap( ~ Species, ncol=1) +
+  xlab("Sepal Length (cm)") +
+  ylab("Frequency") +
+  ggtitle("Sepal Length By Species\n")
+
+ggplot(data = iris, aes(x=Sepal.Length, colour=Species)) + 
+    geom_density() + 
+    xlab("Sepal Length (cm)") +
+    ylab("Density")  + 
+    ggtitle("Sepal Length By Species (Density)\n") +
+    theme(plot.title = element_text(lineheight=.8, face="plain"))
+```
+
