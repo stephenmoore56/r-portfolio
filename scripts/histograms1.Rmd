@@ -4,14 +4,11 @@ author: "Stephen Moore"
 date: "December 15, 2015"
 output: 
     html_document:
-        theme: cosmo
+        theme: default
         highlight: tango
 ---
 ```{r init, warning=FALSE, message=FALSE}
-library(lattice)
-library(ggplot2)
 library(knitr)
-library(gridExtra)
 knitr::opts_chunk$set(tidy=T, 
                fig.width=8,
                fig.height=6,
@@ -22,7 +19,7 @@ knitr::opts_chunk$set(tidy=T,
 options(width = 120)
 ```
 
-This document demonstrates different ways of generating histograms with the base, lattice and ggplot2 plotting packages.
+This document demonstrates different ways of generating histograms with the base, lattice and ggplot2 plotting packages.  Plots make use of the iris dataset.
 
 ```{r}
 data(iris); attach(iris)
@@ -46,56 +43,67 @@ par(mfrow=c(1,1))
 ### Lattice Plotting Package
 
 ```{r latticePlottingPackage, tidy=F}
+library(lattice)
 histogram(~ Sepal.Length | Species,
-          col=c("orange","lightblue","purple"),
           main="Sepal Length By Species",
           xlab="Sepal Length (cm)",
+          breaks=seq(from=4,to=9,by=0.25),
+          col=c("orange","lightblue","purple"),
           panel=function(x, col=col,...){
             panel.histogram(x,col=col[packet.number()],...)
-          })
+          },
+          layout=c(1,3))
+densityplot(~ Sepal.Length | Species,
+            main="Sepal Length By Species",
+            xlab="Sepal Length (cm)",
+            layout=c(1,3))
+densityplot(~ Sepal.Length,
+            groups=Species,
+            xlab="Sepal Length (cm)",
+            main="Sepal Length By Species",
+            plot.points=FALSE,
+            auto.key=TRUE)
 ```
 
 ### ggplot2 Plotting Package
 
 ```{r ggplot2PlottingPackage, tidy=F}
+library(ggplot2)
+library(gridExtra)
 ggplot(data = iris, aes(x=Sepal.Length)) +
   geom_histogram(aes(fill=Species)) +
   scale_fill_brewer(palette="Set2") +
   facet_wrap( ~ Species, ncol=1) +
   xlab("Sepal Length (cm)") +
   ylab("Frequency") +
+  theme_bw() +
   ggtitle("Sepal Length By Species\n")
-
 p1 = ggplot(data = iris, aes(x=Sepal.Length, colour=Species)) + 
     geom_density() + 
     xlab("Sepal Length (cm)") +
     ylab("Density")  + 
     ggtitle("Sepal Length By Species (Density)\n") +
     theme(plot.title = element_text(lineheight=.8, face="plain"))
-
-
-
 p2 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) + 
     geom_density(alpha=0.2) + 
     xlab("Sepal Length (cm)") +
     ylab("Density")  + 
     ggtitle("Sepal Length By Species (Density)\n") +
     theme(plot.title = element_text(lineheight=.8, face="plain"))
-
-grid.arrange(p1,p2,ncol=2)
+grid.arrange(p1,p2,nrow=2)
 
 p1 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) +
   geom_bar()+
   xlab("Sepal Length (cm)") +
   ylab("Frequency") +
-  ggtitle("Sepal Length By Species\n")
-
+  ggtitle("Sepal Length By Species\n") +
+  theme_bw()
 p2 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) +
   geom_bar(position="fill")+
   xlab("Sepal Length (cm)") +
   ylab("Frequency") +
-  ggtitle("Sepal Length By Species\n")
-
-grid.arrange(p1,p2,ncol=2)
+  ggtitle("Sepal Length By Species\n") +
+  theme_bw()
+grid.arrange(p1,p2,nrow=2)
 ```
 
