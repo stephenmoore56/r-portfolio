@@ -11,6 +11,7 @@ output:
 library(lattice)
 library(ggplot2)
 library(knitr)
+library(gridExtra)
 knitr::opts_chunk$set(tidy=T, 
                fig.width=8,
                fig.height=6,
@@ -65,11 +66,36 @@ ggplot(data = iris, aes(x=Sepal.Length)) +
   ylab("Frequency") +
   ggtitle("Sepal Length By Species\n")
 
-ggplot(data = iris, aes(x=Sepal.Length, colour=Species)) + 
+p1 = ggplot(data = iris, aes(x=Sepal.Length, colour=Species)) + 
     geom_density() + 
     xlab("Sepal Length (cm)") +
     ylab("Density")  + 
     ggtitle("Sepal Length By Species (Density)\n") +
     theme(plot.title = element_text(lineheight=.8, face="plain"))
+
+
+
+p2 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) + 
+    geom_density(alpha=0.2) + 
+    xlab("Sepal Length (cm)") +
+    ylab("Density")  + 
+    ggtitle("Sepal Length By Species (Density)\n") +
+    theme(plot.title = element_text(lineheight=.8, face="plain"))
+
+grid.arrange(p1,p2,ncol=2)
+
+p1 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) +
+  geom_bar()+
+  xlab("Sepal Length (cm)") +
+  ylab("Frequency") +
+  ggtitle("Sepal Length By Species\n")
+
+p2 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) +
+  geom_bar(position="fill")+
+  xlab("Sepal Length (cm)") +
+  ylab("Frequency") +
+  ggtitle("Sepal Length By Species\n")
+
+grid.arrange(p1,p2,ncol=2)
 ```
 

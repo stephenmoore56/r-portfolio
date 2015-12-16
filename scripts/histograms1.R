@@ -14,7 +14,7 @@ histogram(~ Sepal.Length | Species,
 
 ggplot(data = iris, aes(x=Sepal.Length)) +
   geom_histogram(aes(fill=Species)) +
-  scale_fill_brewer(palette="dark2") +
+  scale_fill_brewer(palette="Set2") +
   facet_wrap( ~ Species, ncol=1) +
   xlab("Sepal Length (cm)") +
   ylab("Frequency") +
