@@ -6,7 +6,11 @@ output:
     html_document:
         theme: default
         highlight: tango
----
+
+### Introduction
+
+This document demonstrates different ways of generating histograms with the base, lattice and ggplot2 plotting packages.  Plots make use of the iris dataset.
+
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
 knitr::opts_chunk$set(tidy=T, 
@@ -17,17 +21,12 @@ knitr::opts_chunk$set(tidy=T,
                message=FALSE,
                echo=TRUE)
 options(width = 120)
-```
-
-This document demonstrates different ways of generating histograms with the base, lattice and ggplot2 plotting packages.  Plots make use of the iris dataset.
-
-```{r}
 data(iris); attach(iris)
 ```
 
 ### Base Plotting Package
 
-```{r, tidy=F}
+```{r basePlottingPackage, tidy=F}
 par(mfrow=c(1,2))
 hist(Sepal.Length, col="orange", 
      main="Sepal Length (Frequency)",

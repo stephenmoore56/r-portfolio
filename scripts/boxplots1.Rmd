@@ -1,0 +1,100 @@
+---
+title: "R Graphics - Box Plots"
+author: "Stephen Moore"
+date: "December 15, 2015"
+output: 
+    html_document:
+        theme: default
+        highlight: tango
+---
+
+### Introduction
+
+This document demonstrates different ways of generating box plots with the base, lattice and ggplot2 plotting packages.  Plots make use of the birthwt dataset from the MASS library.
+
+```{r init, warning=FALSE, message=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy=T, 
+               fig.width=5,
+               fig.height=5,
+               fig.align='left',
+               warning=FALSE,
+               message=FALSE,
+               echo=TRUE)
+options(width = 120)
+library(MASS)
+bwdata = birthwt
+# convert a few numeric columns to categorical variables
+bwdata$race = factor(bwdata$race)
+levels(bwdata$race) = c("white","black","other")
+bwdata$smoke = factor(bwdata$smoke)
+levels(bwdata$smoke) = c("No Smoke","Smoke")
+```
+
+### Base Plotting Package
+
+```{r basePlottingPackage, tidy=F}
+colors = c("darkgoldenrod1","cadetblue1","darkolivegreen1")
+boxplot(bwdata$bwt ~ bwdata$smoke,
+        main="Birth Weight by Smoking Status",
+        ylab="Smoking Status",
+        xlab="Birth Weight (grams)",
+        notch=T,
+        col=colors,
+        horizontal=T)
+boxplot(bwdata$bwt ~ bwdata$race,
+        main="Birth Weight by Race",
+        xlab="Race",
+        ylab="Birth Weight (grams)",
+        notch=T,
+        col=colors,
+        horizontal=F)
+```
+
+### Lattice Plotting Package
+
+```{r latticePlottingPackage, tidy=F}
+library(lattice)
+bwplot(~ bwdata$bwt | bwdata$smoke,
+       main="Birth Weight by Smoking Status",
+       ylab="Smoking Status",
+       xlab="Birth Weight (grams)",
+       horizontal=T,
+       layout=c(1,2),
+       col="darkolivegreen1")
+
+bwplot(~ bwdata$bwt | bwdata$race,
+       main="Birth Weight by Race",
+       ylab="Race",
+       xlab="Birth Weight (grams)",
+       horizontal=T,
+       layout=c(1,3),
+       col="darkgoldenrod1")
+```
+
+### ggplot2 Plotting Package
+
+```{r ggplot2PlottingPackage, tidy=F}
+library(ggplot2)
+ggplot(bwdata, aes(x=race, y=bwt, color=race)) +
+  geom_boxplot() +
+  xlab("Race") +
+  ylab("Birth Weight (grams)") +
+  ggtitle("Birth Weight by Race") +
+  theme_bw()
+ggplot(bwdata, aes(x=smoke, y=bwt, fill=smoke)) +
+  geom_boxplot() +
+  xlab("Smoking Status") +
+  ylab("Birth Weight (grams)") +
+  ggtitle("Birth Weight by Smoking Status") +
+  scale_fill_brewer(palette="Pastel2") +
+  theme_bw()
+```
+
+### Programming Environment
+
+```{r}
+sessionInfo()
+```
+
+
