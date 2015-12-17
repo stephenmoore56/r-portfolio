@@ -10,7 +10,7 @@ histogram(~ Sepal.Length | Species,
           panel=function(x, col=col,...){
             panel.histogram(x,col=col[packet.number()],...) #gets color for each panel
           })
-?histogram
+?hist
 
 ggplot(data = iris, aes(x=Sepal.Length)) +
   geom_histogram(aes(fill=Species)) +

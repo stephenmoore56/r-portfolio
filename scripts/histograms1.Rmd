@@ -1,5 +1,5 @@
 ---
-title: "Histogram Examples"
+title: "R Graphics - Histograms"
 author: "Stephen Moore"
 date: "December 15, 2015"
 output: 
@@ -34,7 +34,9 @@ hist(Sepal.Length, col="orange",
      xlab="Sepal Length (cm)")
 hist(Sepal.Length, prob=TRUE, col="violet", 
      main="Sepal Length (Density)",
-     xlab="Sepal Length (cm)") 
+     xlab="Sepal Length (cm)",
+     ylim=c(0.0,0.7))
+lines(density(Sepal.Length, adjust=0.25), col="red", lwd=2)
 lines(density(Sepal.Length), col="blue", lwd=2)
 lines(density(Sepal.Length, adjust=2), lty="dotted", col="darkgreen", lwd=2)
 par(mfrow=c(1,1))
@@ -70,22 +72,36 @@ densityplot(~ Sepal.Length,
 ```{r ggplot2PlottingPackage, tidy=F}
 library(ggplot2)
 library(gridExtra)
+ggplot(data = iris, aes(x=Sepal.Length,y=..density..)) +
+  geom_histogram(fill="cornsilk",colour="grey60",size=.5) + 
+  geom_line(stat="density", adjust=0.5, colour="red") +
+  geom_line(stat="density") +
+  geom_line(stat="density", adjust=2.0, colour="blue") +
+  xlab("Sepal Length (cm)") +
+  ylab("Density") +
+  xlim(3,9) +
+  theme_bw() +
+  ggtitle("Sepal Length By Species\n")
 ggplot(data = iris, aes(x=Sepal.Length)) +
   geom_histogram(aes(fill=Species)) +
   scale_fill_brewer(palette="Set2") +
   facet_wrap( ~ Species, ncol=1) +
   xlab("Sepal Length (cm)") +
   ylab("Frequency") +
+  xlim(3,9) +
   theme_bw() +
   ggtitle("Sepal Length By Species\n")
 p1 = ggplot(data = iris, aes(x=Sepal.Length, colour=Species)) + 
-    geom_density() + 
+    geom_line(stat="density") + 
+    xlim(3,9) +
     xlab("Sepal Length (cm)") +
     ylab("Density")  + 
     ggtitle("Sepal Length By Species (Density)\n") +
     theme(plot.title = element_text(lineheight=.8, face="plain"))
 p2 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) + 
-    geom_density(alpha=0.2) + 
+    geom_density(colour=NA,alpha=0.2) + 
+    geom_line(stat="density") + 
+    xlim(3,9) +
     xlab("Sepal Length (cm)") +
     ylab("Density")  + 
     ggtitle("Sepal Length By Species (Density)\n") +
@@ -106,4 +122,11 @@ p2 = ggplot(data = iris, aes(x=Sepal.Length, fill=Species)) +
   theme_bw()
 grid.arrange(p1,p2,nrow=2)
 ```
+
+### Programming Environment
+
+```{r}
+sessionInfo()
+```
+
 
