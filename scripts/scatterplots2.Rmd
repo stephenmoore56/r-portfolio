@@ -1,0 +1,64 @@
+---
+title: "R Graphics - Scatterplots"
+subtitle: "Large Datasets and Overplotting"
+author: "Stephen Moore"
+date: "December 15, 2015"
+output: 
+    html_document:
+        theme: default
+        highlight: tango
+---
+
+### Introduction
+
+This document demonstrates different ways of generating scatter plots with the base, CAR, lattice and ggplot2 plotting packages.  Plots make use of the diamond dataset from the MASS package.
+
+```{r init, warning=FALSE, message=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy=T, 
+               fig.width=8,
+               fig.height=5,
+               fig.align='left',
+               warning=FALSE,
+               message=FALSE,
+               echo=TRUE)
+options(width = 120)
+library(ggplot2)
+attach(diamonds)
+
+```
+
+### ggplot2 Plotting Package
+
+```{r ggplot2PlottingPackage, tidy=F}
+ggplot(diamonds,aes(x=carat,y=price)) + geom_point(alpha = 0.1)
+ggplot(diamonds,aes(x=log10(carat),y=log10(price))) + 
+  geom_point(alpha = 0.1, colour="orange") + 
+  geom_density2d()+ theme_bw()
+ggplot(diamonds,aes(x=log10(carat),y=log10(price))) + 
+  stat_binhex()
+ggplot(diamonds,aes(x=log10(carat),y=log10(price))) + 
+  stat_binhex(colour="white", na.rm=TRUE) +
+  scale_fill_gradientn(colours=c("blue","orange"), name = "Frequency", na.value=NA) + 
+  theme_bw()
+```
+```{r smoothedScatterplot, tidy=F}
+
+# create a color palette to use in smoothed scatterplot
+library(RColorBrewer)
+buylrd = c("#313695", "#4575B4", "#74ADD1", "#ABD9E9", "#E0F3F8", "#FFFFBF",
+           "#FEE090", "#FDAE61", "#F46D43", "#D73027", "#A50026") 
+myColRamp = colorRampPalette(c(buylrd))
+
+# smoothed scatterplot
+smoothScatter(x=log10(carat),y=log10(price),
+              colramp=myColRamp)
+```
+
+### Programming Environment
+
+```{r}
+sessionInfo()
+```
+
+
