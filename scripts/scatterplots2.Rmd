@@ -1,6 +1,6 @@
 ---
-title: "R Graphics - Scatterplots"
-subtitle: "Large Datasets and Overplotting"
+title: "R Graphics - High-Density Scatterplots"
+subtitle: "Solutions for Large Datasets and Overplotting"
 author: "Stephen Moore"
 date: "December 15, 2015"
 output: 
@@ -11,7 +11,7 @@ output:
 
 ### Introduction
 
-This document demonstrates different ways of generating scatter plots with the base, CAR, lattice and ggplot2 plotting packages.  Plots make use of the diamond dataset from the MASS package.
+This document demonstrates different ways of generating scatter plots for large datasets with the ggplot2 plotting package.  Plots make use of the diamonds dataset.
 
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
@@ -25,13 +25,27 @@ knitr::opts_chunk$set(tidy=T,
 options(width = 120)
 library(ggplot2)
 attach(diamonds)
-
 ```
 
-### ggplot2 Plotting Package
+### The Overplotting Problem
 
-```{r ggplot2PlottingPackage, tidy=F}
+Standard scatterplots of large datasets are blobs that obscure structure in the data.
+
+```{r overplotting1, tidy=F}
+ggplot(diamonds,aes(x=carat,y=price)) + geom_point()
+```
+
+We can mitigate the problem somewhat by manipulating the alpha transparency of geom_point().
+
+```{r overplotting2, tidy=F}
 ggplot(diamonds,aes(x=carat,y=price)) + geom_point(alpha = 0.1)
+```
+
+### Better Solutions to Overplotting
+
+Using contour lines or heatmaps can reveal structure in large, dense datasets.  In the case of these two variables from the diamonds dataset (price and carat), a log10 transform also helps to reveal the clusters and price points for standard carat weights of diamonds (1/4, 1/2, 1, 1.5, 2, 3).
+
+```{r overplotting3, tidy=F}
 ggplot(diamonds,aes(x=log10(carat),y=log10(price))) + 
   geom_point(alpha = 0.1, colour="orange") + 
   geom_density2d()+ theme_bw()
