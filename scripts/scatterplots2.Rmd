@@ -16,7 +16,7 @@ This document demonstrates different ways of generating scatter plots for large 
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
 knitr::opts_chunk$set(tidy=T, 
-               fig.width=8,
+               fig.width=10,
                fig.height=5,
                fig.align='left',
                warning=FALSE,
@@ -24,37 +24,51 @@ knitr::opts_chunk$set(tidy=T,
                echo=TRUE)
 options(width = 120)
 library(ggplot2)
+library(colorspace)
+library(gridExtra)
 attach(diamonds)
 ```
 
 ### The Overplotting Problem
 
-Standard scatterplots of large datasets are blobs that obscure structure in the data.
+Standard scatterplots of large datasets are blobs that obscure structure in the data. We can mitigate the problem somewhat by manipulating the alpha transparency of geom_point().
 
 ```{r overplotting1, tidy=F}
-ggplot(diamonds,aes(x=carat,y=price)) + geom_point()
-```
-
-We can mitigate the problem somewhat by manipulating the alpha transparency of geom_point().
-
-```{r overplotting2, tidy=F}
-ggplot(diamonds,aes(x=carat,y=price)) + geom_point(alpha = 0.1)
+p = ggplot(diamonds,aes(x=carat,y=price))  +
+  ggtitle("Price vs. Carat Weight") +
+  xlab("Carat Weight") +
+  ylab("Price")
+p1 = p + geom_point()
+p2 = p + geom_point(alpha = 0.1, colour="purple") +
+  theme_bw()
+grid.arrange(p1,p2,ncol=2)
 ```
 
 ### Better Solutions to Overplotting
 
 Using contour lines or heatmaps can reveal structure in large, dense datasets.  In the case of these two variables from the diamonds dataset (price and carat), a log10 transform also helps to reveal the clusters and price points for standard carat weights of diamonds (1/4, 1/2, 1, 1.5, 2, 3).
 
-```{r overplotting3, tidy=F}
-ggplot(diamonds,aes(x=log10(carat),y=log10(price))) + 
+```{r overplotting2, tidy=F}
+p = ggplot(diamonds,aes(x=log10(carat),y=log10(price))) +
+  ggtitle("Price vs. Carat Weight") +
+  xlab("log10(Carat Weight)") +
+  ylab("log10(Price)") +
+  ylim(2.5,4.5)
+p1 = p + 
   geom_point(alpha = 0.1, colour="orange") + 
   geom_density2d()+ theme_bw()
-ggplot(diamonds,aes(x=log10(carat),y=log10(price))) + 
-  stat_binhex()
-ggplot(diamonds,aes(x=log10(carat),y=log10(price))) + 
+p2 = p +
+  geom_density2d()+ theme_bw()
+grid.arrange(p1,p2,ncol=2)
+
+p1 = p +
+  stat_binhex(colour="white", na.rm=TRUE) +
+  scale_fill_gradientn(colours=c("purple","green"), name = "Frequency", na.value=NA)
+p2 = p +
   stat_binhex(colour="white", na.rm=TRUE) +
   scale_fill_gradientn(colours=c("blue","orange"), name = "Frequency", na.value=NA) + 
   theme_bw()
+grid.arrange(p1,p2,ncol=2)
 ```
 ```{r smoothedScatterplot, tidy=F}
 
@@ -66,7 +80,10 @@ myColRamp = colorRampPalette(c(buylrd))
 
 # smoothed scatterplot
 smoothScatter(x=log10(carat),y=log10(price),
-              colramp=myColRamp)
+              colramp=myColRamp,
+              main="Price vs. Caret Weight",
+              xlab="log10(Carat Weight)",
+              ylab="log10(Price)")
 ```
 
 ### Programming Environment
