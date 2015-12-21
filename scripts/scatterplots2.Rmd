@@ -2,7 +2,7 @@
 title: "R Graphics - High-Density Scatterplots"
 subtitle: "Solutions for Large Datasets and Overplotting"
 author: "Stephen Moore"
-date: "December 15, 2015"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
     html_document:
         theme: default

@@ -1,11 +1,12 @@
 ---
 title: "R Graphics - Histograms"
 author: "Stephen Moore"
-date: "December 15, 2015"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
     html_document:
         theme: default
         highlight: tango
+---
 
 ### Introduction
 
@@ -31,6 +32,7 @@ par(mfrow=c(1,2))
 hist(Sepal.Length, col="orange", 
      main="Sepal Length (Frequency)",
      xlab="Sepal Length (cm)")
+abline(v=mean(Sepal.Length),col="blue",lwd=2)
 hist(Sepal.Length, prob=TRUE, col="violet", 
      main="Sepal Length (Density)",
      xlab="Sepal Length (cm)",
