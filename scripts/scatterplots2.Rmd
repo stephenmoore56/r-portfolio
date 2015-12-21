@@ -11,7 +11,7 @@ output:
 
 ### Introduction
 
-This document demonstrates different ways of generating scatter plots for large datasets with the ggplot2 plotting package.  Plots make use of the diamonds dataset.
+This document demonstrates different ways of generating scatter plots for large datasets with the ggplot2 and tabplot plotting packages.  Plots make use of the diamonds dataset.
 
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
@@ -29,7 +29,7 @@ library(gridExtra)
 attach(diamonds)
 ```
 
-### The Overplotting Problem
+## The Overplotting Problem
 
 Standard scatterplots of large datasets are blobs that obscure structure in the data. We can mitigate the problem somewhat by manipulating the alpha transparency of geom_point().
 
@@ -44,9 +44,11 @@ p2 = p + geom_point(alpha = 0.1, colour="purple") +
 grid.arrange(p1,p2,ncol=2)
 ```
 
-### Better Solutions to Overplotting
+## Better Solutions to Overplotting
 
-Using contour lines or heatmaps can reveal structure in large, dense datasets.  In the case of these two variables from the diamonds dataset (price and carat), a log10 transform also helps to reveal the clusters and price points for standard carat weights of diamonds (1/4, 1/2, 1, 1.5, 2, 3).
+### ggplot2 Scatterplots
+
+Using density lines or heatmaps can reveal structure in large datasets.  In addition, a log10 transform of the price and carat variables also helps to reveal clusters and price points around standard carat weights (1/4, 1/2, 1, 1.5, 2, 3).
 
 ```{r overplotting2, tidy=F}
 p = ggplot(diamonds,aes(x=log10(carat),y=log10(price))) +
@@ -69,8 +71,25 @@ p2 = p +
   scale_fill_gradientn(colours=c("blue","orange"), name = "Frequency", na.value=NA) + 
   theme_bw()
 grid.arrange(p1,p2,ncol=2)
+
+p1 = ggplot(diamonds,aes(x=log10(carat),y=log10(price),colour=color)) +
+  ggtitle("Price vs. Carat Weight") +
+  xlab("log10(Carat Weight)") +
+  ylab("log10(Price)") +
+  ylim(2.5,4.5) + 
+  geom_point()
+p2 = ggplot(diamonds,aes(x=log10(carat),y=log10(price),colour=cut)) +
+  ggtitle("Price vs. Carat Weight") +
+  xlab("log10(Carat Weight)") +
+  ylab("log10(Price)") +
+  ylim(2.5,4.5) + 
+  geom_point()
+grid.arrange(p1,p2,ncol=2)
 ```
-```{r smoothedScatterplot, tidy=F}
+
+### Smoothed Scatterplots
+
+```{r smoothedScatterplot, fig.width=6, tidy=F}
 
 # create a color palette to use in smoothed scatterplot
 library(RColorBrewer)
@@ -84,6 +103,13 @@ smoothScatter(x=log10(carat),y=log10(price),
               main="Price vs. Caret Weight",
               xlab="log10(Carat Weight)",
               ylab="log10(Price)")
+```
+
+### Visualization of large datasets with tabplot
+
+```{r tabplot, tidy=F}
+library(tabplot)
+tableplot(diamonds, select = c(carat, price, cut, color, clarity), sortCol = price)
 ```
 
 ### Programming Environment
