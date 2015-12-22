@@ -1,0 +1,73 @@
+---
+title: "R - Descriptive Statistics"
+author: "Stephen Moore"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+    html_document:
+        theme: default
+        highlight: tango
+        toc: true
+---
+
+### Introduction
+
+This document demonstrates different ways of generating descriptive statistics.  The document make use of the diamonds dataset.
+
+```{r init, warning=FALSE, message=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy=T, 
+               fig.width=10,
+               fig.height=5,
+               fig.align='left',
+               warning=FALSE,
+               message=FALSE,
+               echo=TRUE)
+options(width = 120)
+library(ggplot2)
+attach(diamonds)
+```
+
+### Descriptive Statistics Functions
+
+```{r descriptiveStatistics1, tidy=F}
+# show metadata for the dataset
+str(diamonds)
+# show the beginning and ending rows of the dataset
+head(diamonds)
+tail(diamonds)
+```
+
+```{r descriptiveStatistics2, tidy=F}
+# show the mean of all variables in the dataset.
+# This technique could also be used with other functions like
+#   median()
+#   sd()
+#   min()
+#   max()
+numeric_columns = c(1,5:10)
+sapply(diamonds[numeric_columns],mean,na.rm=T)
+# show Tukey's five number summary (min, 1Q, median, 3Q, max)
+fivenum(diamonds$price)
+summary(diamonds)
+```
+
+```{r descriptiveStatistics3, tidy=F}
+# good alternative library for descriptive statistics
+library(psych)
+describe(diamonds)
+describeBy(diamonds, group=color)
+```
+
+```{r descriptiveStatistics4, tidy=F}
+# another library
+library(pastecs)
+stat.desc(diamonds)
+```
+
+### Programming Environment
+
+```{r}
+sessionInfo()
+```
+
+
