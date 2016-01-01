@@ -1,0 +1,71 @@
+---
+title: "Machine Learning - K-Means Clustering"
+author: "Stephen Moore"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+    html_document:
+        theme: default
+        highlight: tango
+        toc: true        
+---
+
+### Introduction
+
+This document demonstrates basic k-means clustering technique.  The analysis makes use of the iris dataset.
+
+```{r init, warning=FALSE, message=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy=T, 
+               fig.width=8,
+               fig.height=6,
+               fig.align='center',
+               warning=FALSE,
+               message=FALSE,
+               echo=TRUE)
+options(width = 120)
+data(iris); attach(iris)
+```
+
+### Base Plotting Package
+
+```{r loadData, tidy=F}
+library(datasets)
+head(iris)
+```
+```{r scatterplot, tidy=F}
+library(ggplot2)
+ggplot(iris, aes(Petal.Length, Petal.Width, color = Species)) + 
+  geom_point()
+```
+```{r kmeans, tidy=F}
+set.seed(20)
+irisCluster <- kmeans(iris[, 3:4], 3, nstart = 20)
+irisCluster
+```
+```{r, confusionMatrix, tidy=F}
+table(irisCluster$cluster, iris$Species)
+```
+```{r, plotClusters, tidy=F}
+irisCluster$cluster <- as.factor(irisCluster$cluster)
+centers=as.data.frame(irisCluster$centers)
+centers$Species = as.numeric(rownames(centers))
+colnames(centers)
+centers
+
+library(cluster)
+clusplot(iris, irisCluster$cluster, color=TRUE, shade=TRUE, 
+  	labels=2, lines=0)
+
+```
+```{r}
+irisCluster$centers
+as.data.frame(as.table(irisCluster$centers))
+```
+
+### Programming Environment
+
+```{r}
+sessionInfo()
+```
+
+
