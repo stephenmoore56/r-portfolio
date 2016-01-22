@@ -95,7 +95,7 @@ ggplot(data = iris, aes(x=Sepal.Length,y=..density..)) +
   ylab("Density") +
   xlim(3,9) +
   theme_economist() +
-  ggtitle("Sepal Length By Species\n")
+  ggtitle("Sepal Length\n")
 ggplot(data = iris, aes(x=Sepal.Length)) +
   geom_histogram(aes(fill=Species)) +
   scale_fill_brewer(palette="Set2") +

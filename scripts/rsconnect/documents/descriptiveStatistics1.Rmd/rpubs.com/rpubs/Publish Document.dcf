@@ -3,6 +3,5 @@ account: rpubs
 server: rpubs.com
 bundleId:
         https://api.rpubs.com/api/v1/document/136318/856291b5f90f4d9dad5a434fdcc58c79
-url:
-        http://rpubs.com/publish/claim/136318/0482ffc598784ee9a6950401cddaf2cb
-when: 1450752921.42981
+url: http://rpubs.com/stephenmoore56/136318
+when: 1453498853.37176

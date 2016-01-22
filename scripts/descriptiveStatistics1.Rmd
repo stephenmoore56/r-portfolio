@@ -11,7 +11,7 @@ output:
 
 ### Introduction
 
-This document demonstrates different ways of generating descriptive statistics.  The document make use of the diamonds dataset.
+This document demonstrates different ways of generating descriptive statistics and makes use of the diamonds dataset.
 
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
@@ -33,8 +33,14 @@ attach(diamonds)
 # show metadata for the dataset
 str(diamonds)
 # show the beginning and ending rows of the dataset
-head(diamonds)
-tail(diamonds)
+kable(head(diamonds), 
+      format='markdown', 
+      caption="Books Read",
+      digits=4)
+kable(tail(diamonds), 
+      format='markdown', 
+      caption="Books Read",
+      digits=4)
 ```
 
 ```{r descriptiveStatistics2, tidy=F}
@@ -48,20 +54,27 @@ numeric_columns = c(1,5:10)
 sapply(diamonds[numeric_columns],mean,na.rm=T)
 # show Tukey's five number summary (min, 1Q, median, 3Q, max)
 fivenum(diamonds$price)
+# base summary function; provides counts for categorical variables
 summary(diamonds)
 ```
 
 ```{r descriptiveStatistics3, tidy=F}
 # good alternative library for descriptive statistics
 library(psych)
-describe(diamonds)
-describeBy(diamonds, group=color)
+kable(describe(diamonds[numeric_columns]), 
+      format='markdown', 
+      caption="Books Read",
+      digits=4)
+describeBy(diamonds[numeric_columns], group=color)
 ```
 
 ```{r descriptiveStatistics4, tidy=F}
 # another library
 library(pastecs)
-stat.desc(diamonds)
+kable(stat.desc(diamonds[numeric_columns]), 
+      format='markdown', 
+      caption="Books Read",
+      digits=4)
 ```
 
 ### Programming Environment
