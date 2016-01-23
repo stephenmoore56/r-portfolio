@@ -15,6 +15,7 @@ This document demonstrates different ways of generating descriptive statistics a
 
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
+library(dplyr)
 knitr::opts_chunk$set(tidy=T, 
                fig.width=10,
                fig.height=5,
@@ -27,7 +28,7 @@ library(ggplot2)
 attach(diamonds)
 ```
 
-### Descriptive Statistics Functions
+### Base Package
 
 ```{r descriptiveStatistics1, tidy=F}
 # show metadata for the dataset
@@ -58,6 +59,8 @@ fivenum(diamonds$price)
 summary(diamonds)
 ```
 
+### psych Package
+
 ```{r descriptiveStatistics3, tidy=F}
 # good alternative library for descriptive statistics
 library(psych)
@@ -68,6 +71,8 @@ kable(describe(diamonds[numeric_columns]),
 describeBy(diamonds[numeric_columns], group=color)
 ```
 
+### pastecs Package
+
 ```{r descriptiveStatistics4, tidy=F}
 # another library
 library(pastecs)
@@ -75,6 +80,34 @@ kable(stat.desc(diamonds[numeric_columns]),
       format='markdown', 
       caption="Books Read",
       digits=4)
+```
+
+### dplyr Package
+
+```{r descriptiveStatistics5, tidy=F}
+# another library
+library(dplyr)
+
+# custom function for std err of the mean
+se = function(x) {
+  sd(x, na.rm=TRUE) / sqrt(length(x[!is.na(x)])) 
+}
+
+price_by_color = diamonds %>%
+  group_by(color) %>% 
+  summarise(ct=n(),
+            mn=mean(price),
+            md=median(price),
+            min=min(price),
+            max=max(price),
+            range=max-min,
+            sd=sd(price),
+            se(price),
+            skew(price),
+            kurtosi(price))
+colnames(price_by_color) = 
+  c('Color','Count','Mean','Median','Min','Max','Range','Std Dev','Std Err','Skew','Kurtosis')
+kable(price_by_color, format='markdown', digits=4)
 ```
 
 ### Programming Environment

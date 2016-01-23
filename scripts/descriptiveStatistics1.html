@@ -82,7 +82,10 @@ img {
 <div id="TOC">
 <ul>
 <li><a href="#introduction">Introduction</a></li>
-<li><a href="#descriptive-statistics-functions">Descriptive Statistics Functions</a></li>
+<li><a href="#base-package">Base Package</a></li>
+<li><a href="#psych-package">psych Package</a></li>
+<li><a href="#pastecs-package">pastecs Package</a></li>
+<li><a href="#dplyr-package">dplyr Package</a></li>
 <li><a href="#programming-environment">Programming Environment</a></li>
 </ul>
 </div>
@@ -91,6 +94,7 @@ img {
 <h3>Introduction</h3>
 <p>This document demonstrates different ways of generating descriptive statistics and makes use of the diamonds dataset.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(knitr)
+<span class="kw">library</span>(dplyr)
 knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T, 
                <span class="dt">fig.width=</span><span class="dv">10</span>,
                <span class="dt">fig.height=</span><span class="dv">5</span>,
@@ -102,8 +106,8 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 <span class="kw">library</span>(ggplot2)
 <span class="kw">attach</span>(diamonds)</code></pre>
 </div>
-<div id="descriptive-statistics-functions" class="section level3">
-<h3>Descriptive Statistics Functions</h3>
+<div id="base-package" class="section level3">
+<h3>Base Package</h3>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># show metadata for the dataset</span>
 <span class="kw">str</span>(diamonds)</code></pre>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    53940 obs. of  10 variables:
@@ -219,7 +223,6 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 <table>
 <thead>
 <tr class="header">
-<th align="left"></th>
 <th align="right">carat</th>
 <th align="left">cut</th>
 <th align="left">color</th>
@@ -234,7 +237,6 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">53935</td>
 <td align="right">0.72</td>
 <td align="left">Premium</td>
 <td align="left">D</td>
@@ -247,7 +249,6 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 <td align="right">3.58</td>
 </tr>
 <tr class="even">
-<td align="left">53936</td>
 <td align="right">0.72</td>
 <td align="left">Ideal</td>
 <td align="left">D</td>
@@ -260,7 +261,6 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 <td align="right">3.50</td>
 </tr>
 <tr class="odd">
-<td align="left">53937</td>
 <td align="right">0.72</td>
 <td align="left">Good</td>
 <td align="left">D</td>
@@ -273,7 +273,6 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 <td align="right">3.61</td>
 </tr>
 <tr class="even">
-<td align="left">53938</td>
 <td align="right">0.70</td>
 <td align="left">Very Good</td>
 <td align="left">D</td>
@@ -286,7 +285,6 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 <td align="right">3.56</td>
 </tr>
 <tr class="odd">
-<td align="left">53939</td>
 <td align="right">0.86</td>
 <td align="left">Premium</td>
 <td align="left">H</td>
@@ -299,7 +297,6 @@ knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">tidy=</span>T,
 <td align="right">3.74</td>
 </tr>
 <tr class="even">
-<td align="left">53940</td>
 <td align="right">0.75</td>
 <td align="left">Ideal</td>
 <td align="left">D</td>
@@ -344,6 +341,9 @@ numeric_columns =<span class="st"> </span><span class="kw">c</span>(<span class=
 ##  3rd Qu.: 6.540   3rd Qu.: 6.540   3rd Qu.: 4.040  
 ##  Max.   :10.740   Max.   :58.900   Max.   :31.800  
 ## </code></pre>
+</div>
+<div id="psych-package" class="section level3">
+<h3>psych Package</h3>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># good alternative library for descriptive statistics</span>
 <span class="kw">library</span>(psych)
 <span class="kw">kable</span>(<span class="kw">describe</span>(diamonds[numeric_columns]), 
@@ -554,6 +554,9 @@ numeric_columns =<span class="st"> </span><span class="kw">c</span>(<span class=
 ## x        5 2808    6.52    1.20    6.64    6.54    1.25   3.93    10.74     6.81 -0.15    -0.73  0.02
 ## y        6 2808    6.52    1.20    6.63    6.54    1.25   3.90    10.54     6.64 -0.15    -0.75  0.02
 ## z        7 2808    4.03    0.74    4.11    4.05    0.79   2.46     6.98     4.52 -0.13    -0.69  0.01</code></pre>
+</div>
+<div id="pastecs-package" class="section level3">
+<h3>pastecs Package</h3>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># another library</span>
 <span class="kw">library</span>(pastecs)
 <span class="kw">kable</span>(<span class="kw">stat.desc</span>(diamonds[numeric_columns]), 
@@ -717,6 +720,142 @@ numeric_columns =<span class="st"> </span><span class="kw">c</span>(<span class=
 </tbody>
 </table>
 </div>
+<div id="dplyr-package" class="section level3">
+<h3>dplyr Package</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># another library</span>
+<span class="kw">library</span>(dplyr)
+
+<span class="co"># custom function for std err of the mean</span>
+se =<span class="st"> </span>function(x) {
+  <span class="kw">sd</span>(x, <span class="dt">na.rm=</span><span class="ot">TRUE</span>) /<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(x[!<span class="kw">is.na</span>(x)])) 
+}
+
+price_by_color =<span class="st"> </span>diamonds %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(color) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">ct=</span><span class="kw">n</span>(),
+            <span class="dt">mn=</span><span class="kw">mean</span>(price),
+            <span class="dt">md=</span><span class="kw">median</span>(price),
+            <span class="dt">min=</span><span class="kw">min</span>(price),
+            <span class="dt">max=</span><span class="kw">max</span>(price),
+            <span class="dt">range=</span>max-min,
+            <span class="dt">sd=</span><span class="kw">sd</span>(price),
+            <span class="kw">se</span>(price),
+            <span class="kw">skew</span>(price),
+            <span class="kw">kurtosi</span>(price))
+<span class="kw">colnames</span>(price_by_color) =<span class="st"> </span>
+<span class="st">  </span><span class="kw">c</span>(<span class="st">'Color'</span>,<span class="st">'Count'</span>,<span class="st">'Mean'</span>,<span class="st">'Median'</span>,<span class="st">'Min'</span>,<span class="st">'Max'</span>,<span class="st">'Range'</span>,<span class="st">'Std Dev'</span>,<span class="st">'Std Err'</span>,<span class="st">'Skew'</span>,<span class="st">'Kurtosis'</span>)
+<span class="kw">kable</span>(price_by_color, <span class="dt">format=</span><span class="st">'markdown'</span>, <span class="dt">digits=</span><span class="dv">4</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Color</th>
+<th align="right">Count</th>
+<th align="right">Mean</th>
+<th align="right">Median</th>
+<th align="right">Min</th>
+<th align="right">Max</th>
+<th align="right">Range</th>
+<th align="right">Std Dev</th>
+<th align="right">Std Err</th>
+<th align="right">Skew</th>
+<th align="right">Kurtosis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">D</td>
+<td align="right">6775</td>
+<td align="right">3169.954</td>
+<td align="right">1838.0</td>
+<td align="right">357</td>
+<td align="right">18693</td>
+<td align="right">18336</td>
+<td align="right">3356.591</td>
+<td align="right">40.7797</td>
+<td align="right">2.1046</td>
+<td align="right">4.6674</td>
+</tr>
+<tr class="even">
+<td align="left">E</td>
+<td align="right">9797</td>
+<td align="right">3076.753</td>
+<td align="right">1739.0</td>
+<td align="right">326</td>
+<td align="right">18731</td>
+<td align="right">18405</td>
+<td align="right">3344.159</td>
+<td align="right">33.7863</td>
+<td align="right">2.1692</td>
+<td align="right">4.8945</td>
+</tr>
+<tr class="odd">
+<td align="left">F</td>
+<td align="right">9542</td>
+<td align="right">3724.886</td>
+<td align="right">2343.5</td>
+<td align="right">342</td>
+<td align="right">18791</td>
+<td align="right">18449</td>
+<td align="right">3784.992</td>
+<td align="right">38.7476</td>
+<td align="right">1.7543</td>
+<td align="right">2.8169</td>
+</tr>
+<tr class="even">
+<td align="left">G</td>
+<td align="right">11292</td>
+<td align="right">3999.136</td>
+<td align="right">2242.0</td>
+<td align="right">354</td>
+<td align="right">18818</td>
+<td align="right">18464</td>
+<td align="right">4051.103</td>
+<td align="right">38.1231</td>
+<td align="right">1.4989</td>
+<td align="right">1.7212</td>
+</tr>
+<tr class="odd">
+<td align="left">H</td>
+<td align="right">8304</td>
+<td align="right">4486.669</td>
+<td align="right">3460.0</td>
+<td align="right">337</td>
+<td align="right">18803</td>
+<td align="right">18466</td>
+<td align="right">4215.944</td>
+<td align="right">46.2649</td>
+<td align="right">1.3825</td>
+<td align="right">1.4460</td>
+</tr>
+<tr class="even">
+<td align="left">I</td>
+<td align="right">5422</td>
+<td align="right">5091.875</td>
+<td align="right">3730.0</td>
+<td align="right">334</td>
+<td align="right">18823</td>
+<td align="right">18489</td>
+<td align="right">4722.388</td>
+<td align="right">64.1330</td>
+<td align="right">1.1579</td>
+<td align="right">0.4183</td>
+</tr>
+<tr class="odd">
+<td align="left">J</td>
+<td align="right">2808</td>
+<td align="right">5323.818</td>
+<td align="right">4234.0</td>
+<td align="right">335</td>
+<td align="right">18710</td>
+<td align="right">18375</td>
+<td align="right">4438.187</td>
+<td align="right">83.7543</td>
+<td align="right">1.0343</td>
+<td align="right">0.2794</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div id="programming-environment" class="section level3">
 <h3>Programming Environment</h3>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre>
@@ -733,13 +872,13 @@ numeric_columns =<span class="st"> </span><span class="kw">c</span>(<span class=
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] pastecs_1.3-18 boot_1.3-17    psych_1.5.8    ggplot2_2.0.0  knitr_1.12.3  
+## [1] pastecs_1.3-18 boot_1.3-17    psych_1.5.8    ggplot2_2.0.0  dplyr_0.4.3    knitr_1.12.3  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.3      digest_0.6.9     plyr_1.8.3       grid_3.2.3       gtable_0.1.2     formatR_1.2.1   
-##  [7] magrittr_1.5     evaluate_0.8     scales_0.3.0     highr_0.5.1      stringi_1.0-1    rmarkdown_0.9.2 
-## [13] tools_3.2.3      stringr_1.0.0    munsell_0.4.2    parallel_3.2.3   yaml_2.1.13      colorspace_1.2-6
-## [19] mnormt_1.5-3     htmltools_0.3</code></pre>
+##  [1] Rcpp_0.12.3      magrittr_1.5     mnormt_1.5-3     munsell_0.4.2    colorspace_1.2-6 R6_2.1.1        
+##  [7] stringr_1.0.0    highr_0.5.1      plyr_1.8.3       tools_3.2.3      parallel_3.2.3   grid_3.2.3      
+## [13] gtable_0.1.2     DBI_0.3.1        htmltools_0.3    lazyeval_0.1.10  yaml_2.1.13      assertthat_0.1  
+## [19] digest_0.6.9     formatR_1.2.1    evaluate_0.8     rmarkdown_0.9.2  stringi_1.0-1    scales_0.3.0</code></pre>
 </div>
 
 

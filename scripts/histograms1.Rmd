@@ -11,10 +11,12 @@ output:
 
 ### Introduction
 
-This document demonstrates different ways of generating histograms with the base, lattice and ggplot2 plotting packages.  Plots make use of the iris dataset.
+This document demonstrates different ways of generating histograms with the base, lattice and ggplot2 plotting packages.  Plots make use of the iris dataset.  Summary statistics generated with dplyr have been included where appropriate.
 
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
+library(dplyr)
+library(psych)
 knitr::opts_chunk$set(tidy=T, 
                fig.width=8,
                fig.height=6,
@@ -55,6 +57,31 @@ lines(density(Sepal.Length, adjust=2), lty="dotted", col="darkgreen", lwd=2)
 par(mfrow=c(1,1))
 ```
 
+#### Summary Statistics - Sepal Length
+
+```{r basePlottingPackage1summary, tidy=F}
+# function for standard error of the mean 
+se = function(x) {
+  sd(x, na.rm=TRUE) / sqrt(length(x[!is.na(x)])) 
+}
+
+# summary statistics with dplyr
+sepal_length = iris %>%
+  summarise(ct=n(),
+            mn=mean(Sepal.Length),
+            md=median(Sepal.Length),
+            min=min(Sepal.Length),
+            max=max(Sepal.Length),
+            range=max-min,
+            sd=sd(Sepal.Length),
+            se(Sepal.Length),
+            skew(Sepal.Length),
+            kurtosi(Sepal.Length))
+colnames(sepal_length) = 
+  c('Count','Mean','Median','Min','Max','Range','Std Dev','Std Err','Skew','Kurtosis')
+kable(sepal_length, format='markdown', digits=4)
+```
+
 ### Lattice Plotting Package
 
 ```{r latticePlottingPackage, tidy=F}
@@ -78,6 +105,26 @@ densityplot(~ Sepal.Length,
             main="Sepal Length By Species",
             plot.points=FALSE,
             auto.key=TRUE)
+```
+
+#### Summary Statistics - Sepal Length by Species
+
+```{r latticePlottingPackageSummary, tidy=F}
+sepal_length_by_species = iris %>%
+  group_by(Species) %>% 
+  summarise(ct=n(),
+            mn=mean(Sepal.Length),
+            md=median(Sepal.Length),
+            min=min(Sepal.Length),
+            max=max(Sepal.Length),
+            range=max-min,
+            sd=sd(Sepal.Length),
+            se(Sepal.Length),
+            skew(Sepal.Length),
+            kurtosi(Sepal.Length))
+colnames(sepal_length_by_species) = 
+  c('Species','Count','Mean','Median','Min','Max','Range','Std Dev','Std Err','Skew','Kurtosis')
+kable(sepal_length_by_species, format='markdown', digits=4)
 ```
 
 ### ggplot2 Plotting Package
