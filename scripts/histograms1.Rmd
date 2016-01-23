@@ -80,6 +80,21 @@ sepal_length = iris %>%
 colnames(sepal_length) = 
   c('Count','Mean','Median','Min','Max','Range','Std Dev','Std Err','Skew','Kurtosis')
 kable(sepal_length, format='markdown', digits=4)
+
+sepal_length_percentiles = iris %>%
+    summarise('Min' = min(Sepal.Length),
+              '10%' = quantile(Sepal.Length,prob=.10),
+              '20%' = quantile(Sepal.Length,prob=.20),
+              '30%' = quantile(Sepal.Length,prob=.30),
+              '40%' = quantile(Sepal.Length,prob=.40),
+              '50% / Median' = quantile(Sepal.Length,prob=.50),
+              '60%' = quantile(Sepal.Length,prob=.60),
+              '70%' = quantile(Sepal.Length,prob=.70),
+              '80%' = quantile(Sepal.Length,prob=.80),
+              '90%' = quantile(Sepal.Length,prob=.90),
+              '95%' = quantile(Sepal.Length,prob=.95),
+              'Max' = max(Sepal.Length))
+kable(sepal_length_percentiles, format='markdown', digits=1)
 ```
 
 ### Lattice Plotting Package

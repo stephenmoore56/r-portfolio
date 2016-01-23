@@ -15,7 +15,6 @@ This document demonstrates different ways of generating descriptive statistics a
 
 ```{r init, warning=FALSE, message=FALSE}
 library(knitr)
-library(dplyr)
 knitr::opts_chunk$set(tidy=T, 
                fig.width=10,
                fig.height=5,
@@ -24,7 +23,10 @@ knitr::opts_chunk$set(tidy=T,
                message=FALSE,
                echo=TRUE)
 options(width = 120)
+library(dplyr)
 library(ggplot2)
+library(psych)
+library(pastecs)
 attach(diamonds)
 ```
 
@@ -63,7 +65,6 @@ summary(diamonds)
 
 ```{r descriptiveStatistics3, tidy=F}
 # good alternative library for descriptive statistics
-library(psych)
 kable(describe(diamonds[numeric_columns]), 
       format='markdown', 
       caption="Books Read",
@@ -75,7 +76,6 @@ describeBy(diamonds[numeric_columns], group=color)
 
 ```{r descriptiveStatistics4, tidy=F}
 # another library
-library(pastecs)
 kable(stat.desc(diamonds[numeric_columns]), 
       format='markdown', 
       caption="Books Read",
@@ -85,14 +85,13 @@ kable(stat.desc(diamonds[numeric_columns]),
 ### dplyr Package
 
 ```{r descriptiveStatistics5, tidy=F}
-# another library
-library(dplyr)
-
 # custom function for std err of the mean
 se = function(x) {
-  sd(x, na.rm=TRUE) / sqrt(length(x[!is.na(x)])) 
+  data = na.omit(x)
+  sd(data) / sqrt(length(data)) 
 }
 
+# descriptive statistics
 price_by_color = diamonds %>%
   group_by(color) %>% 
   summarise(ct=n(),
@@ -102,12 +101,28 @@ price_by_color = diamonds %>%
             max=max(price),
             range=max-min,
             sd=sd(price),
-            se(price),
-            skew(price),
-            kurtosi(price))
+            se=se(price),
+            skew=skew(price),
+            kurtosis=kurtosi(price))
 colnames(price_by_color) = 
   c('Color','Count','Mean','Median','Min','Max','Range','Std Dev','Std Err','Skew','Kurtosis')
 kable(price_by_color, format='markdown', digits=4)
+
+# percentiles
+price_by_color_percentiles = diamonds %>%
+    summarise('Min' = min(price),
+              '10%' = quantile(price,prob=.10),
+              '20%' = quantile(price,prob=.20),
+              '30%' = quantile(price,prob=.30),
+              '40%' = quantile(price,prob=.40),
+              '50% / Median' = quantile(price,prob=.50),
+              '60%' = quantile(price,prob=.60),
+              '70%' = quantile(price,prob=.70),
+              '80%' = quantile(price,prob=.80),
+              '90%' = quantile(price,prob=.90),
+              '95%' = quantile(price,prob=.95),
+              'Max' = max(price))
+kable(price_by_color_percentiles, format='markdown', digits=1)
 ```
 
 ### Programming Environment
