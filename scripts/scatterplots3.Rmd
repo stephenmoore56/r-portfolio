@@ -1,0 +1,101 @@
+---
+title: "R Graphics - High-Density Scatterplots"
+subtitle: "Solutions for Large Datasets and Overplotting"
+author: "Stephen Moore"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+    html_document:
+        theme: default
+        highlight: tango
+        toc: true        
+---
+
+### Introduction
+
+This document demonstrates different ways of generating scatter plots for large datasets with the ggplot2 and tabplot plotting packages.  Plots make use of the diamonds dataset.
+
+```{r init, warning=FALSE, message=FALSE}
+library(knitr)
+knitr::opts_chunk$set(tidy=FALSE, 
+               fig.width=10,
+               fig.height=5,
+               fig.align='left',
+               warning=FALSE,
+               message=FALSE,
+               echo=TRUE)
+options(width = 120)
+library(ggplot2)
+library(colorspace)
+library(gridExtra)
+```
+
+## The Overplotting Problem
+
+Standard scatterplots of large datasets are blobs that obscure structure in the data. We can mitigate the problem somewhat by manipulating the alpha transparency of geom_point(), which begins to reveal the varying density of data points
+.
+```{r, cache=TRUE}
+# generate an artificial, large dataset
+x1 = rnorm(100000)
+x2 = rnorm(100000)
+bigdf = as.data.frame(cbind(x1,x2))
+```
+
+```{r overplotting1}
+p = ggplot(bigdf,aes(x=x1,y=x2))  +
+  ggtitle("Plot of 100K Point Dataset") +
+  xlab("x1") +
+  ylab("x2")
+p1 = p + geom_point()
+p2 = p + geom_point(alpha = 0.01, colour="purple") +
+  theme_bw()
+grid.arrange(p1,p2,ncol=2)
+```
+
+## Better Solutions to Overplotting
+
+### ggplot2 Scatterplots
+
+Using density lines or heatmaps can reveal structure in large datasets.
+
+```{r overplotting2}
+p = ggplot(bigdf,aes(x=x1,y=x2)) +
+  ggtitle("Plot of 100K Point Dataset") +
+  xlab("x1") +
+  ylab("x2")
+p1 = p + 
+  geom_point(alpha = 0.01, colour="orange") + 
+  geom_density2d() + 
+  theme_bw()
+p2 = p +
+  stat_bin_hex(colour="white", na.rm=TRUE) +
+  scale_fill_gradientn(colours=c("purple","green"), 
+                       name = "Frequency", 
+                       na.value=NA)
+grid.arrange(p1,p2,ncol=2)
+```
+
+### Smoothed Scatterplots
+
+```{r smoothedScatterplot, fig.width=6, fig.height=6}
+
+# create a color palette to use in smoothed scatterplot
+library(RColorBrewer)
+buylrd = c("#313695", "#4575B4", "#74ADD1", "#ABD9E9", "#E0F3F8", "#FFFFBF",
+           "#FEE090", "#FDAE61", "#F46D43", "#D73027", "#A50026") 
+myColRamp = colorRampPalette(c(buylrd))
+
+# smoothed scatterplot
+smoothScatter(x=x1,y=x2,
+              colramp=myColRamp,
+              main="Plot of 100K Point Dataset",
+              xlab="x1",
+              ylab="x2")
+```
+
+## Programming Environment
+
+```{r}
+sessionInfo()
+```
+
+
