@@ -112,7 +112,7 @@ smoothScatter(x=log10(carat),y=log10(price),
 
 ```{r tabplot, tidy=F}
 library(tabplot)
-tableplot(diamonds, select = c(carat, price, cut, color, clarity), sortCol = price)
+tableplot(diamonds, select = c(carat, price, cut, color, clarity), sortCol = 1)
 ```
 
 ### Programming Environment

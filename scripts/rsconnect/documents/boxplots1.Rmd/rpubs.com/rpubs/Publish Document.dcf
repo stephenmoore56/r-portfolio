@@ -1,7 +1,8 @@
 name: Publish Document
+title:
 account: rpubs
 server: rpubs.com
-bundleId:
-        https://api.rpubs.com/api/v1/document/135543/c98962e1fa154c8885173ba191dc5345
+appId: https://api.rpubs.com/api/v1/document/135543/c98962e1fa154c8885173ba191dc5345
+bundleId: https://api.rpubs.com/api/v1/document/135543/c98962e1fa154c8885173ba191dc5345
 url: http://rpubs.com/stephenmoore56/135543
-when: 1451358306.80726
+when: 1491412571.96679
