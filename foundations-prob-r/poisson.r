@@ -11,5 +11,6 @@ mean(binom2)
 
 ?dpois
 poisson_sample <- rpois(100000, 2)
+hist(poisson_sample, breaks=20)
 mean(poisson_sample == 0)
 dpois(0, 2)

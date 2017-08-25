@@ -36,3 +36,6 @@ pgeom(4, .1)
 still_working <- 1 - pgeom(0:29, .10)
 # Plot the probability for days 1 to 30
 qplot(1:30, still_working)
+?rgeom
+geom_sample = rgeom(10000, .2)
+hist(geom_sample, 100)
