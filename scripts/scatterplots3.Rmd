@@ -67,7 +67,7 @@ p1 = p +
   geom_density2d() + 
   theme_bw()
 p2 = p +
-  stat_bin_hex(colour="white", na.rm=TRUE) +
+  stat_binhex(colour="white", na.rm=TRUE) +
   scale_fill_gradientn(colours=c("purple","green"), 
                        name = "Frequency", 
                        na.value=NA)
