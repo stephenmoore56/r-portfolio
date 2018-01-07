@@ -1,0 +1,89 @@
+---
+title: "R Graphics - Contingency Tables and Bar Charts"
+author: "Stephen Moore"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+    html_document:
+        theme: default
+        highlight: tango
+        toc: true
+---
+
+### Introduction
+
+This document demonstrates different ways of generating contingency tables and bar charts, using the mtcars dataset.
+
+```{r init, warning=FALSE, message=FALSE}
+library(knitr)
+library(ggplot2)
+library(gridExtra)
+knitr::opts_chunk$set(tidy=F, 
+               fig.width=8,
+               fig.height=8,
+               fig.align='left',
+               warning=FALSE,
+               message=FALSE,
+               echo=TRUE)
+options(width = 120)
+data(mtcars)
+```
+
+### Prepare the Data
+
+```{r}
+# gear and cyl are numeric variables in mtcars
+str(mtcars)
+# must make gear and cyl factors for bar charts to work
+mtcars$gear = factor(mtcars$gear)
+mtcars$cyl = factor(mtcars$cyl)
+levels(mtcars$gear)
+levels(mtcars$cyl)
+```
+
+### Raw Counts
+
+```{r}
+# Create side-by-side barcharts of cylinders by gear
+p1 = ggplot(mtcars, aes(x = gear, fill = cyl)) + 
+  geom_bar(position = "dodge")
+p2 = ggplot(mtcars, aes(x = cyl, fill = gear)) + 
+  geom_bar(position = "dodge")
+grid.arrange(p1, p2, ncol=2)
+addmargins(table(mtcars$gear, mtcars$cyl))
+```
+
+### Cylinders By Gear
+
+```{r}
+# Create stacked barcharts of cylinders by gear
+p1 = ggplot(mtcars, aes(x = gear, fill = cyl)) + 
+  geom_bar()
+p2 = ggplot(mtcars, aes(x = gear, fill = cyl)) + 
+  geom_bar(position = "fill") +
+  labs(y = "proportion")
+grid.arrange(p1, p2, ncol=2)
+addmargins(table(mtcars$gear, mtcars$cyl), 2)
+prop.table(table(mtcars$gear, mtcars$cyl), margin=1)
+```
+
+### Gears By Cylinder
+
+```{r, fig.width=8, fig.height=8, tidy=F}
+# Create stacked barcharts of gears by cylinders
+p1 = ggplot(mtcars, aes(x = cyl, fill = gear)) + 
+  geom_bar()
+p2 = ggplot(mtcars, aes(x = cyl, fill = gear)) + 
+  geom_bar(position = "fill") +
+  labs(y = "proportion")
+grid.arrange(p1, p2, ncol=2)
+addmargins(table(mtcars$gear, mtcars$cyl), 1)
+prop.table(table(mtcars$gear, mtcars$cyl), margin=2)
+```
+
+### Programming Environment
+
+```{r}
+sessionInfo()
+```
+
+

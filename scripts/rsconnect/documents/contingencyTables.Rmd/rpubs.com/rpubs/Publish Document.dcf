@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/345708/5fd17a14ac394584a2cce61d2a6cdd9b
+bundleId: https://api.rpubs.com/api/v1/document/345708/5fd17a14ac394584a2cce61d2a6cdd9b
+url: http://rpubs.com/stephenmoore56/345708
+when: 1514835166.43058
